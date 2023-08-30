@@ -13,5 +13,16 @@
     },
     "require-dev": {
         "phpunit/phpunit": "9.5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "webdev\\Test\\" : "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "webdev\\Test\\" : "tests"
+        }
     }
+
 }
