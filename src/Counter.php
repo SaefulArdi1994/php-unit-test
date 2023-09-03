@@ -3,6 +3,7 @@
 namespace webdev\Test;
 
 class Counter {
+    
     private int $counter = 0;
 
     public function increment()

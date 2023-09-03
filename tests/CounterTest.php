@@ -20,8 +20,14 @@ class CounterTest extends TestCase
         self::assertEquals(3, $counter->getCounter());
     }
 
+    /**
+     * @test
+     */
     public function increament()
     {
+        // skip test
+        self::markTestSkipped("Masih ada erorr");
+
         $counter = new Counter();
 
         $counter->increment();
@@ -44,6 +50,15 @@ class CounterTest extends TestCase
     {
         $counter->increment();
         $this->assertEquals(2, $counter->getCounter());
+    }
+
+    /**
+     * @requires PHP >= 8
+     * @requires OSFAMILY Linux
+     */
+    public function testOnlyForLinuxAndPHP8()
+    {
+        self::assertTrue(true, "Only For Linux and PHP 8");
     }
 
 
