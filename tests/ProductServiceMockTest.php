@@ -5,14 +5,16 @@ namespace webdev\Test;
 use PhpParser\Node\Expr\PreDec;
 use PHPUnit\Framework\TestCase;
 
-class ProductServiceTest extends TestCase 
+use function PHPUnit\Framework\never;
+
+class ProductServiceMockTest extends TestCase 
 {
     private ProductRepository $repository;
     private ProductService $service;
 
     protected function setUp(): void
     {
-        $this->repository = $this->createStub(ProductRepository::class);
+        $this->repository = $this->createMock(ProductRepository::class);
         $this->service = new ProductService($this->repository);
     }
 
@@ -96,10 +98,17 @@ class ProductServiceTest extends TestCase
 
     public function testDeleteSuccess()
     {
+
         $product = new Product();
         $product->setId("1");
 
-        $this->repository->method("findById")->willReturn($product);
+        $this->repository->expects(self::once())
+            ->method("delete")
+            ->with(self::equalTo($product));
+
+        $this->repository->method("findById")
+            ->willReturn($product)
+            ->with(self::equalTo("1"));
 
         $this->service->delete("1");
         self::assertTrue(true, "Success Delete");
@@ -107,11 +116,27 @@ class ProductServiceTest extends TestCase
 
     public function testDeleteException()
     {
+        $this->repository->expects(self::never())
+            ->method("delete");
         $this->expectException(\Exception::class);
-        $this->repository->method("findById")->willReturn(null);
+        $this->repository->method("findById")
+            ->willReturn(null)
+            ->with(self::equalTo("1"));
 
         $this->service->delete("1");
     }
 
+    public function testMock()
+    {
+        $product = new Product();
+        $product->setId("1");
+
+        $this->repository->expects(self::once())
+            ->method("findById")
+            ->willReturn($product);
+
+        $result = $this->repository->findById("1");
+        self::assertSame($product, $result);
+    }
 
 }
